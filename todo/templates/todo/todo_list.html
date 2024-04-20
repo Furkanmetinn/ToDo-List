@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yapılacaklar</title>
+    <!-- Bootstrap CSS eklentisi -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            /* Arka plan resmi */
+            background-image: url('https://media.istockphoto.com/id/1285308242/photo/to-do-list-text-on-notepad.jpg?s=612x612&w=0&k=20&c=p85bCVQZwvkrqqqNOJGg2QuPDu6ynTlQHkASQOTELh8=');
+            /* Arka plan resminin konumu ve boyutu */
+            background-size: cover;
+            background-position: center;
+            /* Arka plan resminin tekrar edilmemesi */
+            background-repeat: no-repeat;
+            /* Diğer stillendirme */
+            padding-top: 50px;
+            color: #fff; /* Yazı rengi beyaz olsun */
+        }
+        /* Tamamlandı butonunun stilleri */
+        .btn-success {
+            background-color: #28a745; /* Yeşil renk */
+            border-color: #28a745; /* Kenarlık rengi */
+        }
+        /* Tamamlandı butonunun hover (üzerine gelindiğinde) stilleri */
+        .btn-success:hover {
+            background-color: #218838; /* Koyu yeşil renk */
+            border-color: #1e7e34; /* Koyu kenarlık rengi */
+        }
+        /* Yapılacak işin tamamlandığını gösteren kutunun stilleri */
+        .todo-item.completed {
+            background-color: #d4edda !important; /* Yeşil arka plan reng */
+            color: #155724 !important; /* Yeşil metin rengi */
+        }
+        /* Yapılacak iş kutusu içindeki tamamlandı butonunun rengi */
+        .todo-item.completed .btn-success {
+            background-color: #6c757d !important; /* Gri renk */
+            border-color: #6c757d !important; /* Kenarlık rengi */
+        }
+    </style>
+</head>
+<body>
+    
+        <div class="container">
+            <h1 class="mb-4">Yapılacaklar</h1>
+            <!-- Yapılacak iş ekleme formu -->
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Yapılacak İş</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Ekle</button>
+            </form>
+            <!-- Yapılacak işler listesi -->
+            {% if todos %}
+            <div class="todo-list">
+                <h2 class="mt-4">Yapılacaklar</h2>
+                {% for todo in todos %}
+                    <div class="todo-item">
+                        <p>{{ todo.title }}</p>
+                        <form method="post" action="{% url 'complete_todo' todo.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-success">Tamamlandı</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- JavaScript kodu -->
+    <script>
+        // Tamamlandı butonuna tıklandığında yapılacak işlem
+        function completeTask(element) {
+            // Butonun olduğu parent elementini bul (todo-item)
+            var todoItem = element.parentElement;
+            // Tamamlandı sınıfını ekleyerek CSS'i güncelle
+            todoItem.classList.add("completed");
+        }
+    </script>
+</body>
+</html>
